@@ -1,0 +1,318 @@
+@CHARSET "UTF-8";
+/* common */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
+	blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn,
+	em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var,
+	b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend,
+	table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas,
+	details, embed, figure, figcaption, header, hgroup, menu, nav,
+	output, ruby, section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font: inherit;
+	vertical-align: baseline;
+	box-sizing: border-box;
+}
+
+#canNotFindAnimal {
+	text-align: center;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, footer, header, hgroup,
+	menu, nav, section {
+	display: block;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+	content: "";
+	content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+a {
+	display: block;
+	text-decoration: none;
+}
+
+/* style */
+
+
+/* 폰트 */
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+.notosanskr * {
+	font-family: "Noto Sans KR", sans-serif;
+}
+
+body {
+	font-family: Noto Sans KR;
+}
+
+/* 메인 사이드바 */
+
+#menuicon {
+	display: none;
+	width: 30px;
+	height: 20px;
+	
+}
+
+#menuicon+label {
+	display: block;
+	margin: 30px;
+	width: 30px;
+	height: 20px;
+	position: absolute;
+	z-index: 999;
+	cursor: pointer;
+	top: 80px;
+    left: 325px;
+}
+
+#menuicon+label span {
+	display: block;
+	position: absolute;
+	width: 100%;
+	height: 1.6px;
+	border-radius: 30px;
+	background: #000;
+	transition: all .35s;
+}
+
+#menuicon+label span:nth-child(1) {
+	top: 0;
+}
+
+#menuicon+label span:nth-child(2) {
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+#menuicon+label span:nth-child(3) {
+	bottom: 0;
+}
+
+#menuicon:checked+label {
+	z-index: 999;
+}
+
+#menuicon:checked+label span {
+	background: #000;
+}
+
+#menuicon:checked+label span:nth-child(1) {
+	top: 50%;
+	transform: translateY(-50%) rotate(45deg);
+}
+
+#menuicon:checked+label span:nth-child(2) {
+	opacity: 0;
+}
+
+#menuicon:checked+label span:nth-child(3) {
+	bottom: 50%;
+	transform: translateY(50%) rotate(-45deg);
+}
+
+.sidebar {
+	width: 280px;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: -300px;
+	z-index: 3;
+	transition: all .35s;
+	background-color: #fff;
+}
+
+.sidebar-text {
+	width: 220px;
+	top: 105px;
+	left:10px;
+	position: relative;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+#menuicon:checked+label+div {
+	left: 0;
+}
+
+/* 2차 메뉴 숨기기 */
+.sidebar>ul ul {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 100%; /* 부모 요소 오른쪽에 위치하도록 설정 */
+	min-width: 200px;
+	left: 100%; /* 2차 메뉴의 최소 너비 설정 (필요에 따라 조정) */
+}
+
+.sidebar>ul>li:hover>ul {
+	display: block;
+	background-color: #ffffffc2;
+}
+
+.sidebar ul>li>a {
+	display: block;
+	color: black;
+	font-size: 16px;
+	padding: 10px 20px;
+}
+
+.sidebar-text > li {
+  position: relative; /* 부모 요소에 relative 설정 */
+}
+
+.sidebar-text > li:hover ul {
+  display: block;
+}
+
+.my-title {
+	border-bottom: 1px solid #e7e7e7;
+}
+
+.sidebar-title2 {
+	border-top: 1px solid #e7e7e7;
+	margin-top: 30px;
+	padding-top: 5px;
+}
+
+.sidebar-title1 {
+	border-top: 1px solid #e7e7e7;
+	padding-top: 5px;
+}
+
+.sidebar-title{
+	left:20px;
+	font-size: 25px;
+	font-family: 'Noto Sans KR', sans-serif;
+	padding-bottom: 8px;
+	margin-bottom: 10px;
+	
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+}
+
+.sidebar-loginbutton {
+	position: relative;
+  	left: 30px;
+	box-sizing: border-box;
+	border: 1.5px solid;
+	cursor: pointer;
+	background-color: white;
+	font-family: 'Noto Sans KR', sans-serif;
+	padding: 3px;
+	bottom: 6px
+}
+.sidebar-text > span{
+	position: relative;
+	left:20px;
+	font-size: 30px;
+}
+
+/* 마이페이지 사이드바 style */
+.sidebar2 {
+	display: flex;
+	position: absolute;
+	line-height: 2;
+	margin-left: 350px;
+}
+
+.sidebar2-text {
+	margin-top: 105px;
+	width: 300px;
+}
+
+.sidebar2-title {
+	font-size: 25px;
+}
+
+.sidebar2-title2 {
+	width : 200px;
+	font-size: 20px;
+	border-bottom: 1px solid #e7e7e7;
+}
+
+.sidebar2-mysp a, .sidebar2-mybe a, .sidebar2-pro a, .sidebar2-member a {
+	color: #828282;
+	width: 100px;
+}
+
+.sidebar2-mysp, .sidebar2-mybe, .sidebar2-pro, .sidebar2-member {
+	margin-top: 25px;
+}
+
+
+.common-container-side {
+	width: 904px;
+	margin-top: -2px;
+}
+
+
+.service-util-div-sidebar {
+	width: 930px;
+	height: 50px;
+	font-size: 15px;
+	padding: 13px;
+	margin-left: 170px;
+}
+
+.service-product-utility-sidebar {
+	width: 904px;
+	margin-bottom: 200px;
+	margin-top: -2px;
+}
+
+.service-product-utility-sidebar th, .service-product-utility-sidebar td {
+	padding: 12px;
+	border-top: 1px solid #e7e7e7;
+	border-bottom: 1px solid #e7e7e7;
+}
+
+.service-product-utility-sidebar th {
+	border-bottom: 2px solid #e7e7e7;
+}
+
+.service-product-utility-sidebar td {
+	cursor: pointer;
+	text-align: center;
+	text-align: center;
+}
+
+.common-title-sidebar {
+    font-size: 24px;
+    margin-left: 120px;
+}
+
+
+.service-util-div-sidebar-cancel {
+	width: 930px;
+	height: 50px;
+	font-size: 15px;
+	padding: 13px;
+	margin-left: 77px;
+}

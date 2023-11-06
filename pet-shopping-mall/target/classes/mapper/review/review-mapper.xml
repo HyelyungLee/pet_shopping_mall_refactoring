@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.app.review.repository.ReviewRepository">
+
+    <insert id="insertAttachment" useGeneratedKeys="true" keyProperty="imageId" keyColumn="image_id">
+    insert into 
+    	image_attachment 
+    	(image_id, image_type, image_original_filename, image_renamed_filename, image_file_size, thumbnail, image_created_at) 
+    	values(seq_image_attachment_id.nextval, #{imageType}, #{imageOriginalFilename}, #{imageRenamedFilename}, #{imageFileSize}, #{thumbnail}, default)
+	</insert>
+	
+	<select id="findImageAttachmentsByReviewId" resultMap="ReviewDetailsResultMap">
+	SELECT
+	    r.review_id,
+	    r.review_title,
+	    r.review_content,
+	    r.review_star_rate,
+	    ia.image_original_filename,
+	    ia.image_renamed_filename
+	FROM 
+	    review r
+	LEFT JOIN 
+	    image_attachment_mapping iam ON r.review_id = iam.ref_id AND iam.ref_table = 'review'
+	LEFT JOIN
+	    image_attachment ia ON iam.image_id = ia.image_id
+	WHERE 
+	    r.review_id = #{reviewId}
+	</select>
+	
+	<select id="findProductImageAttachmentsByReviewId" resultMap="ReviewDetailsResultMap">
+	SELECT
+	    r.review_id,
+	    r.review_title,
+	    r.review_content,
+	    r.review_star_rate,
+	    ia.image_original_filename,
+	    ia.image_renamed_filename
+	FROM 
+	    review r
+	LEFT JOIN 
+	    image_attachment_mapping iam ON r.review_id = iam.ref_id AND iam.ref_table = 'review'
+	LEFT JOIN
+	    image_attachment ia ON iam.image_id = ia.image_id
+	WHERE 
+	    r.review_id = #{reviewId}
+	</select>
+	
+	<select id="findProductImageAttachmentsByReviewId2" resultMap="ReviewDetailsResultMap">
+	SELECT
+	    r.review_id,
+	    r.review_title,
+	    r.review_content,
+	    r.review_star_rate,
+	    ia.image_original_filename,
+	    ia.image_renamed_filename
+	FROM 
+	    review r
+	LEFT JOIN 
+	    image_attachment_mapping iam ON r.review_id = iam.ref_id AND iam.ref_table = 'review'
+	LEFT JOIN
+	    image_attachment ia ON iam.image_id = ia.image_id
+	WHERE 
+	    r.review_id = #{reviewId} and r.order_id = #{orderId}
+	</select>
+	
+	
+	<select id="getProductReview" resultMap="productReviewDto">
+	SELECT
+		r.review_id,
+		r.review_member_id,
+	    r.review_title,
+	    r.review_content,
+	    r.review_star_rate,
+	    ia.image_renamed_filename,
+        p.*
+	FROM 
+	    review r
+    left join
+        pet p on p.member_id = r.review_member_id
+	LEFT JOIN 
+	    image_attachment_mapping iam ON r.review_id = iam.ref_id AND iam.ref_table = 'review'
+	LEFT JOIN
+	    image_attachment ia ON iam.image_id = ia.image_id
+	WHERE 
+	    r.product_id = #{productId}
+	</select>
+	
+	<resultMap type="ProductReviewDto" id="productReviewDto">
+    	<result property="reviewId" column="review_id"/>
+    	<result property="reviewMemberId" column="review_member_id"/>
+    	<result property="reviewTitle" column="review_title"/>
+    	<result property="reviewStarRate" column="review_star_rate"/>
+    	<result property="reviewContent" column="review_content"/>
+    	<result property="reviewCreatedAt" column="review_created_at"/>
+		<collection property="reviewImages" ofType="imageAttachment">
+	        <result property="imageRenamedFilename" column="image_renamed_filename"/>
+	    </collection>
+   		<collection property="pets" ofType="Pet">
+	        <result property="petId" column="pet_id"/>
+	        <result property="petName" column="pet_name"/>
+	        <result property="petAge" column="pet_age"/>
+	        <result property="petBreed" column="pet_breed"/>
+	        <result property="petWeight" column="pet_weight"/>
+	        <result property="petGender" column="pet_gender"/>
+    	</collection>
+	</resultMap>
+	
+	
+	
+    
+    <resultMap type="Review" id="reviewResultMap">
+    	<id property="reviewId" column="review_id"/>
+    	<result property="petId" column="pet_id"/>
+    	<result property="orderId" column="order_id"/>
+    	<result property="revieMemberId" column="review_member_id"/>
+    	<result property="productDetailId" column="product_detail_id"/>
+    	<result property="reviewTitle" column="review_title"/>
+    	<result property="reviewContent" column="review_content"/>
+    	<result property="reviewStarRate" column="review_star_rate"/>
+    	<result property="reviewCreatedAt" column="review_created_at"/>
+    </resultMap>
+    
+	<resultMap type="ReviewDetails" id="ReviewDetailsResultMap">
+	    <id property="reviewId" column="review_id"/>
+	    <result property="petId" column="pet_id"/>
+	    <result property="orderId" column="order_id"/>
+	    <result property="reviewMemberId" column="review_member_id"/>
+	    <result property="productDetailId" column="product_detail_id"/>
+	    <result property="reviewTitle" column="review_title"/>
+	    <result property="reviewContent" column="review_content"/>
+	    <result property="reviewStarRate" column="review_star_rate"/>
+	    <result property="reviewCreatedAt" column="review_created_at"/>
+	
+	    <!-- image_attachment 테이블의 내용을 imageAttachment 객체에 매핑 -->
+	    <collection property="attachments" ofType="imageAttachment">
+	        <result property="imageId" column="image_id"/>
+	        <result property="imageType" column="image_type"/>
+	        <result property="imageCategory" column="image_category"/>
+	        <result property="imageOriginalFilename" column="image_original_filename"/>
+	        <result property="imageRenamedFilename" column="image_renamed_filename"/>
+	        <result property="imageFileSize" column="image_file_size"/>
+	        <result property="thumbnail" column="thumbnail"/>
+	        <result property="imageCreatedAt" column="image_created_at"/>
+	    </collection>
+	</resultMap>
+	
+	<select id="productReviewStarAvg" resultMap="productReviewAvgDto">
+	SELECT
+	    p.product_id,
+	    ROUND(AVG(r.review_star_rate), 1) as AVG,
+	    p.product_name
+	FROM
+	    product p join review r 
+	        ON p.product_id = r.product_id
+	WHERE
+	    p.product_id = #{productId}
+	GROUP BY
+	    p.product_id, p.product_name
+	</select>
+	
+<resultMap type="ProductReviewAvgDto" id="productReviewAvgDto">
+    <result column="product_id" property="productId" />
+    <result column="product_name" property="productName" />
+    <result column="AVG" property="reviewStarRate" />
+</resultMap>
+	
+	<select id="findReviewAll" resultType="ReviewListDto">
+    SELECT 
+		r.review_id,
+	    r.order_id,
+	    r.review_star_rate,
+	    r.review_created_at,
+	    p.product_id, 
+	    p.product_name,
+	    pd.option_name, 
+	    pd.option_value,
+	    pd.product_detail_id,
+        ia.image_renamed_filename as thumbnail,
+        ROW_NUMBER() OVER (PARTITION BY r.review_member_id ORDER BY r.review_id ASC) as review_sequence
+	FROM 
+	    review r 
+	    left join product_detail pd 
+	        on r.product_detail_id = pd.product_detail_id 
+	    left join product p 
+	        on p.product_id = pd.product_id 
+	    left join orderTbl o
+	        on r.review_id = o.order_id
+	    left join image_attachment_mapping iam 
+	        on p.product_id = iam.ref_id and iam.ref_table = 'product'
+	    join image_attachment ia 
+	        ON iam.image_id = ia.image_id and ia.thumbnail = 'Y'
+	WHERE 
+	    r.review_member_id = #{reviewMemberId}
+	order by
+		r.review_id desc
+	</select>	
+	
+	<resultMap type="ReviewListDto" id="reviewListDto">
+      <result column="review_id" property="reviewId" />
+      <result column="order_id" property="orderId" />
+      <result column="product_id" property="productId" />
+      <result column="product_detail_id" property="productDetailId" />
+      <result column="review_star_rate" property="reviewStarRate" />
+      <result column="review_created_at" property="reviewCreatedAt" />
+      <result column="product_name" property="productName" />
+      <result column="option_name" property="optionName" />
+      <result column="option_value" property="optionValue" />
+      <result column="image_original_filename" property="imageOriginalFileName" />
+      <result column="image_renamed_filename" property="imageRenamedFileName" />
+   </resultMap>
+   
+   
+   
+	<select id="findProductReviewId" resultType="ReviewProductDto">
+	SELECT 
+	    p.product_name,
+	    pd.option_name, 
+	    pd.option_value
+	FROM 
+	    review r 
+	    left join product_detail pd 
+	        on r.product_detail_id = pd.product_detail_id 
+	    left join product p 
+	        on p.product_id = pd.product_id 
+	    left join orderTbl o
+	        on r.review_id = o.order_id
+	WHERE 
+	    r.review_id = #{reviewId}
+	</select>	
+   
+	<resultMap type="ReviewProductDto" id="reviewProductDto">
+      <result column="review_id" property="reviewId" />
+      <result column="product_name" property="productName" />
+      <result column="option_name" property="optionName" />
+      <result column="option_value" property="optionValue" />
+   </resultMap>
+	
+	
+	
+</mapper>

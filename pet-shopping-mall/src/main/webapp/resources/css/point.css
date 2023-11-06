@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+
+
+/* 포인트 사용, 적립에 따른 색 변화 */
+.plus {
+    color: #5886d3;
+    font-weight: 600;
+}
+
+.minus {
+    color: red;
+    font-weight: 600;
+}
